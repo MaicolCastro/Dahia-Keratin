@@ -59,7 +59,7 @@ export class AppComponent {
   readonly treatments: Treatment[] = [
     {name:'Keratina Orgánica',category:'Alisado',duration:'3–5 meses',description:'Una opción de alisado que busca suavidad, control del frizz y movimiento natural.',detail:'La marca presenta este servicio como un alisado duradero con ingredientes orgánicos. La valoración profesional permite revisar si es adecuado para el estado actual de tu cabello.',image:'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85',tag:'Cuidado especializado'},
     {name:'Botox Capilar',category:'Reparación',duration:'2–3 meses',description:'Hidratación profunda para cabello con resequedad, frizz o aspecto opaco.',detail:'Tratamiento de hidratación profunda descrito por la marca para mejorar la apariencia del cabello dañado sin buscar un efecto de alisado.',image:'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=900&q=85'},
-    {name:'Keratina Láser',category:'Alisado',duration:'4–6 meses',description:'Una alternativa de alisado con enfoque en suavidad y acabado natural.',detail:'La información pública de Dahia Keratin describe este tratamiento como un sellado con tecnología láser. Consulta con la sede los detalles técnicos y la valoración previa.',image:'https://images.unsplash.com/photo-1519699074056-3e7e6f3f2f44?auto=format&fit=crop&w=900&q=85'},
+    {name:'Keratina Láser',category:'Alisado',duration:'4–6 meses',description:'Una alternativa de alisado con enfoque en suavidad y acabado natural.',detail:'La información pública de Dahia Keratin describe este tratamiento como un sellado con tecnología láser. Consulta con la sede los detalles técnicos y la valoración previa.',image:'https://dahiakeratin.com/static/website/images/resultados.jpeg'},
     {name:'Keratina Tradicional',category:'Alisado',duration:'Hasta 6 meses',description:'Para quienes buscan un efecto de alisado más intenso y control del volumen.',detail:'La marca la presenta como una opción de alisado intenso. El resultado depende del tipo, historial y condición del cabello, por eso es importante una valoración.',image:'https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=900&q=85',tag:'Más consultada'},
     {name:'Aminoácidos de Seda',category:'Reparación',duration:'3–4 meses',description:'Una propuesta enfocada en mejorar la apariencia, suavidad y brillo de la fibra capilar.',detail:'Dahia Keratin destaca este servicio por su enfoque de reconstrucción capilar. Consulta con el equipo si se ajusta a tu cabello y a los procesos químicos previos.',image:'https://images.unsplash.com/photo-1512316609839-ce289d3eba0a?auto=format&fit=crop&w=900&q=85'},
     {name:'Nanoplastia',category:'Alisado',duration:'4–6 meses',description:'Un acabado natural y duradero, sujeto a la valoración de cada cabello.',detail:'La información pública de la marca describe la nanoplastia como una alternativa de alisado con nanotecnología. Solicita información sobre composición, cuidados y compatibilidad.',image:'https://dahiakeratin.com/static/website/images/resultados.jpeg'},
@@ -83,9 +83,11 @@ export class AppComponent {
   whatsApp(message: string): string { return 'https://wa.me/573232970866?text=' + encodeURIComponent(message); }
   useImageFallback(event: Event): void {
     const image = event.target as HTMLImageElement;
-    if (!image.getAttribute('src')?.endsWith('/hair-fallback.svg')) {
-      image.src = '/hair-fallback.svg';
-    }
+    const backupImage = 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=85';
+    if (image.src.endsWith('/hair-fallback.svg')) return;
+    // Keep photographic treatment cards if a third-party URL is unavailable.
+    // Use the local SVG only when even the tested backup photograph fails.
+    image.src = image.src === backupImage ? '/hair-fallback.svg' : backupImage;
   }
   openTreatment(t: Treatment): void { this.selectedTreatment = t; }
   sendBooking(): void {
